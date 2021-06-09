@@ -8,19 +8,24 @@ const {
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
- exports.addDataPoint = functions.pubsub.schedule('every 15 minutes').onRun(async (context) => {
-    admin.initializeApp();
-    const db = admin.firestore();
-    functions.logger.info("New Entry", {structuredData: true});
-    const uname = process.env['USERNAME']
-    const upass = process.env['PASSWORD']
-    const members = await scraper.getDataPoint(uname,upass)
-    const now = new Date()
-    const data = {
-      date: now,
-      visitors: members,
-    };
-    
-    const res = await db.collection('visitors').doc(uuidv4()).set(data);
-    response.send(now+' : '+members)
+ exports.addDataPoint = functions.runWith({
+   timeoutSeconds: 120,
+   memory: "2GB"
+ }).pubsub.schedule('every 15 minutes').onRun(async (context) => {
+      (async () => {
+         admin.initializeApp(functions.config().firebase);
+         const db = admin.firestore();
+         const now = new Date()
+         functions.logger.info("New Entry", now);
+         const uname = functions.config()["energie-fitness-tracker"].username
+         const upass = functions.config()["energie-fitness-tracker"].password
+         const members = await scraper.getDataPoint(uname,upass)
+         const data = {
+            date: now,
+            visitors: members,
+         };
+         
+         const result = await db.collection('visitors').doc(uuidv4()).set(data);
+         res.send(now+' : '+members)
+      })();
  });
