@@ -1,4 +1,5 @@
 FROM alpine:3.9
+COPY . .
 
 RUN apk update && apk add --no-cache nmap && \
     echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
@@ -13,4 +14,6 @@ RUN apk update && apk add --no-cache nmap && \
       nodejs \
       nodejs-npm \
       bash \
-      git
+      git && \
+    cd functions && npm install && npm install -G heroku
+COPY . .

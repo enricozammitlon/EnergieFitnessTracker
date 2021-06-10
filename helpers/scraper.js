@@ -4,8 +4,8 @@ const puppeteer = require('puppeteer');
 const getDataPoint = async (email,password) => {
     const login_page = 'https://members.energiefitness.com/'
     const main_page = 'https://members.energiefitness.com/kilburn/inthevenue'
-    //executablePath: '/usr/bin/chromium-browser' ,
-    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    
+    const browser = await puppeteer.launch({executablePath: '/usr/bin/chromium-browser',args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     const page = await browser.newPage();
 
     await page.goto(login_page, {waitUntil: 'load'});
