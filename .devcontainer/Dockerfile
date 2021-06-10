@@ -15,5 +15,5 @@ RUN apk update && apk add --no-cache nmap && \
       nodejs-npm \
       bash \
       git && \
-    cd functions && npm install && npm install -G heroku
+    npm install && npm install -G heroku
 COPY . .
