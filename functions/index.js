@@ -10,8 +10,8 @@ const {
 //
  exports.addDataPoint = functions.runWith({
    timeoutSeconds: 120,
-   memory: "2GB"
- }).pubsub.schedule('every 15 minutes').onRun(async (context) => {
+   memory: "4GB"
+ }).pubsub.schedule('every 1 minutes').onRun(async (context) => {
       (async () => {
          admin.initializeApp(functions.config().firebase);
          const db = admin.firestore();
