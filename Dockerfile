@@ -1,6 +1,7 @@
 FROM alpine:3.9
 
-COPY ["package.json", "package-lock.json*", "/data/"]
+COPY package.json /data/
+
 WORKDIR /data/
 RUN apk update && apk add --no-cache nmap && \
     echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \

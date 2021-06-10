@@ -4,9 +4,10 @@
 	"name": "Node",
 	"build": {
 		"dockerfile": "Dockerfile",
-		"context": ".."
+		"context": "."
 	},
 	"workspaceFolder": "/data/server/",
+	"workspaceMount": "source=workspace,target=/data/server/,type=volume",
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-python.python",
