@@ -10,7 +10,6 @@ const getDataPoint = async (email,password) => {
 
     await page.goto(login_page, {waitUntil: 'load'});
 
-
     await page.type('#Email',email);
     await page.type('#Password',password);
     await page.focus("#Password");
