@@ -9,7 +9,7 @@ const {
 
 app = express();
 app.listen(3000);
-const serviceAccount =  process.env.serviceAccount || require('./service.json');
+const serviceAccount =  JSON.parse(process.env.serviceAccount) || require('./service.json');
 admin.initializeApp({
    credential: admin.credential.cert(serviceAccount)
   });
