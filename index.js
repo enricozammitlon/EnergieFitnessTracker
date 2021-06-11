@@ -8,7 +8,7 @@ const {
  } = require('uuid');
 
 app = express();
-app.listen(3000);
+app.listen(process.env.PORT || 5000);
 const serviceAccount =  JSON.parse(process.env.serviceAccount) || require('./service.json');
 admin.initializeApp({
    credential: admin.credential.cert(serviceAccount)
@@ -35,6 +35,6 @@ const scheduled = (async () => {
 
 
 //scheduled()
-cron.schedule('*/15 * * * *', scheduled);
+cron.schedule('*/5 * * * *', scheduled);
 
  
