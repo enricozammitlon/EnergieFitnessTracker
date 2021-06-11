@@ -35,6 +35,6 @@ const scheduled = (async () => {
 
 
 //scheduled()
-cron.schedule('* * * * *', scheduled);
+cron.schedule('*/15 * * * *', scheduled);
 
  
