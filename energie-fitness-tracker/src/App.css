@@ -1,7 +1,20 @@
 .App {
   text-align: center;
+  min-height: 1200px;
+  display: flex;
+  flex-direction: column;
+  background-color: #282c34;
 }
-
+.ChartContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.ChartContainer h1 {
+  color: white;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
