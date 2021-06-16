@@ -1,3 +1,4 @@
+require ('newrelic');
 const scraper =   require('./helpers/scraper')
 const admin = require('firebase-admin');
 const cron = require('node-cron');

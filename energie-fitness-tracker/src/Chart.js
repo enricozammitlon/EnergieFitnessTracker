@@ -1,48 +1,28 @@
 import React from 'react';
-import { Charts, ChartContainer, ChartRow, YAxis, LineChart,styler,BarChart,Resizable } from "react-timeseries-charts";
-import { TimeSeries, Index } from "pondjs";
+import { Charts, ChartContainer, ChartRow, YAxis, ScatterChart,styler,BandChart,Resizable } from "react-timeseries-charts";
+import { TimeSeries, Index ,percentile} from "pondjs";
 
-export default function Chart(){
-    const data = [
-        ["2017-01-24T00:00", 0.01],
-        ["2017-01-24T01:00", 0.13],
-        ["2017-01-24T02:00", 0.07],
-        ["2017-01-24T03:00", 0.04],
-        ["2017-01-24T04:00", 0.33],
-        ["2017-01-24T05:00", 0.2],
-        ["2017-01-24T06:00", 0.08],
-        ["2017-01-24T07:00", 0.54],
-        ["2017-01-24T08:00", 0.95],
-        ["2017-01-24T09:00", 1.12],
-        ["2017-01-24T10:00", 0.66],
-        ["2017-01-24T11:00", 0.06],
-        ["2017-01-24T12:00", 0.3],
-        ["2017-01-24T13:00", 0.05],
-        ["2017-01-24T14:00", 0.5],
-        ["2017-01-24T15:00", 0.24],
-        ["2017-01-24T16:00", 0.02],
-        ["2017-01-24T17:00", 0.98],
-        ["2017-01-24T18:00", 0.46],
-        ["2017-01-24T19:00", 0.8],
-        ["2017-01-24T20:00", 0.39],
-        ["2017-01-24T21:00", 0.4],
-        ["2017-01-24T22:00", 0.39],
-        ["2017-01-24T23:00", 0.28]
-    ];
+export default function Chart({data}){
     const series = new TimeSeries({
       name: "hilo_rainfall",
       columns: ["index", "precip"],
-      points: data.map(([d, value]) => [Index.getIndexString("1h", new Date(d)), value])
+      points: data.map(([d, value]) => [Index.getIndexString('15m',d.getTime()), value])
     });
     const axis_style = { label: { stroke: "none", fill: "#C0C0C0",'font-weight': 'bold', 'font-size': 'large',  font: '"Goudy Bookletter 1911", sans-serif"' },
      values: { stroke: "none", fill: "#C0C0C0",'font-weight': 'normal', 'font-size': 'medium', font: '"Goudy Bookletter 1911", sans-serif"' },
       ticks: { fill: "none", stroke: "#C0C0C0" },
        axis: { fill: "none", stroke: "none" } }
-    const style = styler([{ key: "precip", color: "#76B82A", selected: "#2CB1CF" }]);
+    const style = styler([{ key: "precip", color: "#76B82A", selected: "#2CB1CF" ,width:1}]);
+    const bandStyle = styler([{ key: "precip", color: "blue", width: 1, opacity: 0.5 }]);
+    //        <div style={{width:'80%'}}>
     return (
-        <div style={{width:'80%'}}>
+        <div style={{width:'90%'}}>
         <Resizable>
-            <ChartContainer timeRange={series.range()} timeAxisStyle={axis_style} title="Gym Visitors" timeAxisTickCount={8}
+            <ChartContainer timeRange={series.range()} 
+                                timeAxisStyle={axis_style} 
+                                title="Tuesdays" 
+                                paddingRight={100} 
+                                paddingTop={5}
             style={{
                 background: "#201d1e",
                 borderRadius: 8,
@@ -53,27 +33,47 @@ export default function Chart(){
                 color: "white",
                 fontWeight: 500,
                 fontSize:25,
-                paddingBottom:10
                 
-            }}>
+            }}
+            padding={20}>
         
-                <ChartRow height="250">
+                <ChartRow height="300">
                     <YAxis
                         id="rain"
+                        showGrid
+                        hideAxisLine
                         style={axis_style}
                         label="Visitors"
-                        format="0d"
-                        tickCount={2}
+                        format=".2f"
                         width={100}
+                        min={0}
+                        max={series.max('precip')}
                         labelOffset={-15}
                         type="linear"
                     />
                     <Charts>
-                        <BarChart
+                        <BandChart
                             axis="rain"
-                            style={style}
-                            columns={["precip"]}
+                            //interpolation="curveBasis"
+                            aggregation={{
+                                size: "15m",
+                                reducers: {
+                                    outer: [percentile(5), percentile(95)],
+                                    inner: [percentile(25), percentile(75)]
+                                }
+                            }}
+                            style={bandStyle}
+                            column="precip"
                             series={series}
+                            interpolation="curveBasis"
+                        />
+                        <ScatterChart
+                            axis="rain"
+                            series={series}
+                            columns={["precip"]}
+                            style={style}
+                            format=".1f"
+                            radius={3}
                         />
                     </Charts>
                 </ChartRow>
